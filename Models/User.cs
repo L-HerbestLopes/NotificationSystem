@@ -1,4 +1,4 @@
-namespace NotificationSystem.Domain.Models;
+namespace NotificationSystem.Models;
 
 public class User
 {
