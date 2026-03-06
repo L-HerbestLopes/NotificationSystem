@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "P1xwmDtpkSg=",
+  "dgSpecHash": "8vCHLeu+Chw=",
   "success": true,
   "projectFilePath": "/home/lu/Projects/CSharp/learning/NotificationSystem/NotificationSystem.csproj",
   "expectedPackageFiles": [
@@ -16,6 +16,7 @@
     "/home/lu/.nuget/packages/microsoft.entityframeworkcore.abstractions/10.0.3/microsoft.entityframeworkcore.abstractions.10.0.3.nupkg.sha512",
     "/home/lu/.nuget/packages/microsoft.entityframeworkcore.analyzers/10.0.3/microsoft.entityframeworkcore.analyzers.10.0.3.nupkg.sha512",
     "/home/lu/.nuget/packages/microsoft.entityframeworkcore.design/10.0.3/microsoft.entityframeworkcore.design.10.0.3.nupkg.sha512",
+    "/home/lu/.nuget/packages/microsoft.entityframeworkcore.inmemory/10.0.3/microsoft.entityframeworkcore.inmemory.10.0.3.nupkg.sha512",
     "/home/lu/.nuget/packages/microsoft.entityframeworkcore.relational/10.0.3/microsoft.entityframeworkcore.relational.10.0.3.nupkg.sha512",
     "/home/lu/.nuget/packages/microsoft.entityframeworkcore.tools/10.0.3/microsoft.entityframeworkcore.tools.10.0.3.nupkg.sha512",
     "/home/lu/.nuget/packages/microsoft.extensions.dependencymodel/10.0.3/microsoft.extensions.dependencymodel.10.0.3.nupkg.sha512",
