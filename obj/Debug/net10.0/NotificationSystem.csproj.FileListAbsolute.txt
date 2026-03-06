@@ -116,3 +116,4 @@
 /home/lu/Projects/CSharp/learning/NotificationSystem/obj/Debug/net10.0/NotificationSystem.csproj.AssemblyReference.cache
 /home/lu/Projects/CSharp/learning/NotificationSystem/obj/Debug/net10.0/Notifica.85592073.Up2Date
 /home/lu/Projects/CSharp/learning/NotificationSystem/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.InMemory.dll
+/home/lu/Projects/CSharp/learning/NotificationSystem/obj/Debug/net10.0/NotificationSystem.sourcelink.json

@@ -15,7 +15,6 @@ public class UserController : ControllerBase
         _userContext = userContext;
     }
 
-    [Route("api/users")]
     [HttpPost]
     public ActionResult<User> CreateUser(User user)
     {
