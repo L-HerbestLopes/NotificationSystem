@@ -13,6 +13,7 @@ public class NotificationController(UserContext userContext) : ControllerBase
 {
     private readonly UserContext _userContext = userContext;
 
+    // registers a notification
     [HttpPost]
     public async Task<ActionResult<Notification>> CreateNotification(NotificationDTO dto)
     {
@@ -53,6 +54,7 @@ public class NotificationController(UserContext userContext) : ControllerBase
         return Ok(notification);
     }
 
+    // get notification by id
     [Route("{id:int}")]
     [HttpGet]
     public async Task<ActionResult<Notification>> GetNotificationById(int id)
@@ -63,22 +65,26 @@ public class NotificationController(UserContext userContext) : ControllerBase
         return Ok(notification);
     }
 
+    // get all notifications
     [HttpGet]
     public async Task<ActionResult<List<Notification>>> GetAllNotifications()
     {
         return await _userContext.Notifications.ToListAsync();
     }
 
+    // search a notification with a recipient id/name, can filter for only unread messages
     [Route("search")]
     [HttpGet]
-    public async Task<ActionResult<List<UserNotification>>> GetByUser([FromQuery]string? name, [FromQuery]int? userid)
+    public async Task<ActionResult<List<UserNotification>>> GetByUser([FromQuery]string? name, [FromQuery]int? userid, [FromQuery]bool showread = true)
     {
+        if(name is null && userid is null) return BadRequest("An user name or id is needed for search");
+
         var user = await _userContext.Users.FirstOrDefaultAsync<User>(u => u.Name == name || u.Id == userid);
 
         if(user is null) return NotFound();
 
         var notifications = await _userContext.UserNotifications
-            .Where(n => n.RecipientId == user.Id)
+            .Where(n => n.RecipientId == user.Id && (!n.IsRead || showread))
             .ToListAsync();
 
         return Ok(notifications);
