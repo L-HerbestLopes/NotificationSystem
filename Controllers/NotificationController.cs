@@ -14,7 +14,7 @@ public class NotificationController(UserContext userContext) : ControllerBase
     private readonly UserContext _userContext = userContext;
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateNotification(NotificationDTO dto)
+    public async Task<ActionResult<Notification>> CreateNotification(NotificationDTO dto)
     {
         if(string.IsNullOrWhiteSpace(dto.Message)
            || dto.Recipients.Count == 0)
@@ -51,5 +51,36 @@ public class NotificationController(UserContext userContext) : ControllerBase
         await _userContext.SaveChangesAsync();
 
         return Ok(notification);
+    }
+
+    [Route("{id:int}")]
+    [HttpGet]
+    public async Task<ActionResult<Notification>> GetNotificationById(int id)
+    {
+        Notification? notification = await _userContext.Notifications.FindAsync(id);
+
+        if(notification is null) return NotFound();
+        return Ok(notification);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<Notification>>> GetAllNotifications()
+    {
+        return await _userContext.Notifications.ToListAsync();
+    }
+
+    [Route("search")]
+    [HttpGet]
+    public async Task<ActionResult<List<UserNotification>>> GetByUser([FromQuery]string? name, [FromQuery]int? userid)
+    {
+        var user = await _userContext.Users.FirstOrDefaultAsync<User>(u => u.Name == name || u.Id == userid);
+
+        if(user is null) return NotFound();
+
+        var notifications = await _userContext.UserNotifications
+            .Where(n => n.RecipientId == user.Id)
+            .ToListAsync();
+
+        return Ok(notifications);
     }
 }
