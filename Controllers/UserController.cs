@@ -16,6 +16,12 @@ public class UserController(UserContext userContext) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<User>> CreateUser(User user)
     {
+        if(_userContext.Users
+            .Where(u => u.Email == user.Email).ToList().Count > 0)
+        {
+            return BadRequest($"User email \"{user.Email}\" was already registered.");
+        }
+
         _userContext.Users.Add(user);
         await _userContext.SaveChangesAsync();
 
@@ -40,14 +46,14 @@ public class UserController(UserContext userContext) : ControllerBase
         return await _userContext.Users.ToListAsync();
     }
 
-    // search user by name or email
+    // search user by email
     [Route("search")]
     [HttpGet]
-    public async Task<ActionResult<User>> GetUserByName([FromQuery]string? name, [FromQuery]string? email)
+    public async Task<ActionResult<User>> GetUserByEmail([FromQuery]string? email)
     {
-        if(name is null && email is null) return BadRequest("A name or email is needed for search.");
+        if(email is null) return BadRequest("An email is needed for the search.");
 
-        var user = await _userContext.Users.FirstOrDefaultAsync<User>(u => u.Name == name || u.Email == email);
+        var user = await _userContext.Users.FirstOrDefaultAsync(u => u.Email == email);
 
         if(user is null) return NotFound();
         return Ok(user);

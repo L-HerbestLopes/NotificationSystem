@@ -17,14 +17,15 @@ public class NotificationController(UserContext userContext) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Notification>> CreateNotification(NotificationDTO dto)
     {
-        if(string.IsNullOrWhiteSpace(dto.Message)
-           || dto.Recipients.Count == 0)
-        {
-            return BadRequest();
-        }
+        if(string.IsNullOrWhiteSpace(dto.Message))
+            return BadRequest("message shouldn't be empty");
+        
+        if(dto.Recipients.Count == 0)
+            return BadRequest("notification must have recipients");
 
         var sender = await _userContext.Users.FindAsync(dto.SenderId);
-        if(sender is null) return BadRequest();
+        if(sender is null) return BadRequest("sender doesn't exist");
+        if(sender.Access == UserAccess.Common) return BadRequest("sender isn't allowed to send notifications");
 
         var notification = new Notification
         {
@@ -72,14 +73,14 @@ public class NotificationController(UserContext userContext) : ControllerBase
         return await _userContext.Notifications.ToListAsync();
     }
 
-    // search a notification with a recipient id/name, can filter for only unread messages
+    // search a notification with a recipient id/email, can filter for only unread messages
     [Route("search")]
     [HttpGet]
-    public async Task<ActionResult<List<UserNotification>>> GetByUser([FromQuery]string? name, [FromQuery]int? userid, [FromQuery]bool showread = true)
+    public async Task<ActionResult<List<UserNotification>>> GetByUser([FromQuery]string? email, [FromQuery]int? userid, [FromQuery]bool showread = true)
     {
-        if(name is null && userid is null) return BadRequest("An user name or id is needed for search");
+        if(email is null && userid is null) return BadRequest("An user email or id is needed for search");
 
-        var user = await _userContext.Users.FirstOrDefaultAsync<User>(u => u.Name == name || u.Id == userid);
+        var user = await _userContext.Users.FirstOrDefaultAsync<User>(u => u.Email == email || u.Id == userid);
 
         if(user is null) return NotFound();
 
